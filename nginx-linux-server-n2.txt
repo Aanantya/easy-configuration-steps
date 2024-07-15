@@ -1,0 +1,31 @@
+                NGINX REVERSE-PROXY SETUP - NOTE 2
+
+
+1. Create a new server configuration file
+
+    $ cd /etc/nginx/conf.d
+    $ nano {filename}.conf
+        for eg. $ nano myapp.conf
+
+        server {
+            listen: {port};
+
+            server_name {domain_name};
+
+            location / {
+                proxy_pass http://localhost:{port}/;
+            }
+        }
+
+2. To diable default.conf file
+
+    $ mv default.conf default.conf.diabled
+
+3. Test nginx working for myapp.conf file 
+
+    $ nginx -t 
+
+4. Reload nginx
+
+    $ nginx -s reload
+

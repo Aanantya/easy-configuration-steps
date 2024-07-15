@@ -1,0 +1,59 @@
+                                    NGINX REVERSE PROXY SSL 
+
+REFERENCES
+
+https://youtu.be/Gdys9qPjuKs
+
+
+
+
+1. Install certbot
+
+    $ apt install certbot python3-cerbot-nginx
+
+2. $ cerbot --nginx -d {domain-name} 
+
+    OR
+    
+   $ cerbot --nginx
+
+
+    ToDo:
+        enter the email for safety
+
+        select redirect
+
+        agree the terms
+
+    Setup does:
+        adds certificates inside nginx.conf file
+
+        adds server_name
+
+        redirect host block
+
+            * this will assure that only server_name will be used to access the application
+                and NOT the ip address
+
+3. [TEST] Certificate renew automatically 
+
+    $ cat /etc/cron.d/certbot
+
+    $ certbot renew --dry-run     
+
+4. Create a cron job for auto renew
+
+    $ crontab -e
+
+        * Consider we want to renew at 4:30 AM of each month
+
+        open /tmp/crontab.T0CWZr/crontab
+
+            add lines
+
+                30 4 1 * * sudo certbot renew --quiet
+
+                * 30=minutes, 4=hour, 1=first date of the month, *=every month, *=any day    
+
+
+

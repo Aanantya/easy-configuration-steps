@@ -1,0 +1,115 @@
+                            DOCKER CONTAINER SECURITY -NOTE 1
+
+
+Tip:    Build your own images
+
+1. Create an image
+    Example
+
+        vim Dockerfile
+
+            FROM ubuntu:18.04
+            LABEL maintainer="{username}"
+
+            #add user to a group and grant privilages
+            RUN groupadd -r {user} && useradd -r -g {user} {user}
+
+            # Note that the above command creates a group with name {user} 
+            # and adds the {user} to group name {user}
+
+
+            # to add user to group sudo and grant root privilages
+            # RUN groupadd -r {user} && useradd -r -g sudo {user}
+
+
+            # Environment variables
+            ENV HOME /home/{user}
+            .
+            .
+            .
+
+2. To build the image 
+
+    $ docker build . -t {nameoftheimage}
+
+
+
+3. To run 
+
+    $ docker run -u {user} -it {nameoftheimage} /bin/bash
+
+    NOTE: user with the image is still capable of escalating the privileges and do anything
+    by doing, $ su root
+
+
+
+4. Modify the Dockerfile to block access to root completely
+
+    $ vim Dockerfile
+
+        FROM ubuntu:18.04
+        LABEL maintainer="{username}"
+    
+        RUN groupadd -r {user} && useradd -r -g {user} {user}
+
+        # add this line to diable root login
+        RUN chsh -s /usr/sbin/nologin root
+ 
+        # OPTIONAL allow user to access root on passwd
+        # RUN passwd
+
+        # Environment variables
+        ENV HOME /home/{user}
+
+
+    save and build the image
+
+
+5. To disable user from escalating the privileges 
+
+    $ docker run -run {user} -it --security-opt=no-new-privileges {nameoftheimage} /bin/bash
+
+
+
+6. Privileged mean the container get all the kernel capabilities
+
+
+7. To provide user with given kernel capabilities
+
+    $ docker run --cap-drop all --cap-add {capability-name} -it -u {user} {nameoftheimage} /bin/bash
+
+    Note: list of kernel capabilities can be refered from https://man7.org/linux/man-pages/man7/capabilities.7.html
+
+
+
+8. Prevent a user from writing to filesystem or setting temporary directory for the user to write
+
+    user read-only facility
+
+        $ docker run --read-only -u {user} -it {nameoftheimage} /bin/bash
+
+    user read-only facility with temporary dir for use 
+        $ docker run --read-only --tmpfs /{dir-name} -u {user} -it {nameoftheimage} /bin/bash
+
+
+9. 
+
+
+
+
+
+
+
+ 
+
+** NOTE to run a docker container in privilege mode
+        $ docker run -it --privileged {nameoftheimage}
+
+
+
+
+REFERENCES:
+
+    https://youtu.be/KINjI1tlo2w
+
+

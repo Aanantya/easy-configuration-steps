@@ -1,0 +1,76 @@
+        NGINX LINUX SETUP - NOTE 1
+
+Nginx.conf 
+
+1. visit nginx installation folder and 'ls' into the folder
+
+    $ cd /etc/nginx
+    $ la -ah
+
+
+2. To view nginx user
+    
+    $ cat /etc/passwd
+
+    * Check at the botton
+
+3. To check how nginx process is running
+    
+    $ pa aux |grep nginx
+
+4. Worker_processes (More Worker_processes..better performance but,
+    too many Worker_processes many lead to performance defficency)
+
+    * Currently, worker_processes = auto;
+
+5. Nginx logs
+
+    $ ls -l /var/log/nginx
+
+    * access.log : shows up when nginx is up and running
+
+            $ tail -f /var/log/nginx/access.log
+
+
+    * error.log
+
+
+6. pid ( Shows where pid file for nginx is located)
+
+7. events --> worker_connections ( Total number of connections a work may have )
+
+
+8. http [block] ( Configuring web server )
+
+9. conf.d/default.conf (default server Configuration i.e server [block])
+
+    * error_page ( errors it handles) 
+        * errors are send to /50x.html
+    
+    * root webpage location as '/root'
+
+    * server_name as domain server_name
+
+
+    if multiple websites exits then multiple location / [block] will be created
+
+        for eg. location /bolg/ {
+                root ...;
+                index ...;
+            }
+
+
+    * file is case sensitive
+
+    Example for server mapping : 
+        www.domain_name/ --> /user/share/nginx/html/index.html
+
+10. To restart nginx and remove all the changes made
+
+    $ systemctl restart nginx
+    $ systemctl status nginx
+
+    else
+
+    $ systemctl reload nginx
+    $ systemctl status nginx

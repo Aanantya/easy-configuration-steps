@@ -1,0 +1,5 @@
+                            UWSGI CONFIGURATIONS FOR PRODUCTION
+
+REFERENCES
+
+https://youtu.be/p6R1h2Nn468

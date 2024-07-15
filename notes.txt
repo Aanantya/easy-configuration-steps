@@ -1,0 +1,42 @@
+***Installing nodejs and npm***
+
+
+sudo apt-get update
+
+
+sudo apt-get upgrade
+
+
+curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+
+
+
+*** create react js app***
+
+
+sudo npm -g install create-react-app
+
+
+create-react-app <react-sample>
+
+
+cd react-sample
+
+
+npm start
+
+
+
+
+*** Adding docker file***
+
+
+nano Dockerfile
+
+
+
+<paste> FROM nginx \n COPY build /usr/share/nginx/html
+
+
+
+

@@ -1,0 +1,131 @@
+            SERVER SECURITY SETUP - NOTE 1
+
+
+Agenda:
+
+-   Update remote system
+-   Automatic updates
+-   Create new user and add user to sudo group
+-   Disable password access and disable root access
+-   Disable unnecessary ports
+
+
+1. Update remote system
+
+    login to the server
+
+            $ ssh root@<server-ip-address>
+
+    $ apt update 
+    $ apt dist-upgrade
+
+    * reload the server
+
+2. Automatic updates (Unattended updates) 
+
+    Install the package unattended-upgrades
+    
+        $ apt install unattended-upgrades
+
+
+    Turn on the feature
+
+        $ dpkg-reconfigure --priority=low unattended-upgrades
+
+        enter yes to turn on
+
+
+3. Create new user and add user to sudo group
+
+    $ useradd -m -s /bin/bash {username} && passwd {username}
+
+    check new user created
+
+        $ ls /home
+
+        * Output will be directory with same name as user account
+
+        $ cat /etc/passwd
+
+        * new user at the end of the Output
+
+    enable user to access sudo command
+
+        $ visudo
+
+            this command opens up /etc/sudoers.tmp file
+
+            inside the file check for group sudo 
+
+    install sudo  
+
+        $ apt install sudo
+    
+    add new user to the group sudo
+
+        $ usermod -aG sudo {username
+
+        check group of new user
+
+            $ groups {username}
+
+            $ su - {username}
+
+            test sudo:
+                $ sudo apt update
+
+    
+    $ exit 
+
+
+4. Disable password access and disable root access
+
+    generate ssh-key
+
+        $ ssh-keygen
+
+            * enter a passphrase
+
+        $ ls -l ~/.ssh
+
+    copy the key to server
+
+        $ ssh-copy-id -i ~/.ssh/id_rsa.pub {username}@{server ip address}
+
+    ssh into server
+
+        $ ssh {username}@{server ip address}
+
+    
+    inside server
+
+        $ sudo nano /etc/ssh/sshd_config
+
+        Inside the file diable root login by setting
+            PermitRootLogin no
+
+        add
+            AllowUsers {username} {username2} {username3}
+
+    restart the service sshd
+
+        $ sudo systemctl restart sshd 
+
+    exit server
+
+        $ exit
+
+    re-login to the server using ssh via new user
+
+        $ ssh {server ip address}
+
+5. Disable unnecessary ports 
+
+    inside the remote system
+
+        $ sudo ss -atpu
+    
+    to remove any unncessary service using port
+
+        $ sudo apt remove {service}
+

@@ -1,0 +1,60 @@
+                        NGINX LINUX SETUP - NOTE 3
+
+REFERENCES
+
+https://youtu.be/-lrSPJTeGhQ
+
+
+1. On nginx webpage 'NOT FOUND'.. extra information regarding the host os and 
+   the version of nginx running on the host os is displayed.
+
+
+   To get rid of these informations
+
+   Goto /etc/nginx/nginx.conf file
+    
+        $ vim /etc/nginx/nginx.conf
+
+        diable server tokens
+
+            set 
+                
+                server_tokens off;
+
+        disable server signature
+
+            add
+                
+                proxy_hide_header X-Powered-By;
+                add_header X-Frame-Options SAMEORIGIN;
+
+2. To enable password authentication for accessing the webpage(OPTIONAL)
+
+    $ htpasswd -c /etc/nginx/.htpasswd {user}
+
+
+    To add the user and password
+
+        $ vim /etc/nginx/nginx.conf
+
+        add lines inside server block
+
+            server {
+                .
+                .
+                .
+                auth_basic              "{message}";
+                auth_basic_user_file    /etc/nginx/.htpasswd;
+                
+                # enable auth inside location block
+                location / {
+                    auth_basic          on;
+                    .
+                    .
+                }
+            }
+
+        * {message} can be anything user defined 
+            eg. "Development team ONLY"
+
+    $ systemctl restart nginx 

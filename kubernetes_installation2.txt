@@ -1,0 +1,85 @@
+*** kubernetes installation ***
+
+
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
+
+
+
+sudo apt-get install curl
+
+
+
+sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+
+
+
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
+
+
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+
+sudo usermod -aG docker $USER && newgrp docker
+
+
+*** Minikube commands ***
+
+minikube version
+
+
+minikube start
+
+
+minikube status
+
+
+*** ERROR ***
+** Failed to start docker container. Running "minikube delete" may fix it: provision: Temporary Error: error getting ip during provisioning: IPs output should only be one line, got 2 lines
+
+❌  Exiting due to GUEST_PROVISION: Failed to start host: provision: Temporary Error: error getting ip during provisioning: IPs output should only be one line, got 2 lines **
+
+
+
+
+Tried to solve it via following commands:
+
+
+cd ~/.docker
+rm -rf config.json
+minikube delete --profile=minikube
+minikube start --driver=docker
+
+
+
+Then:
+
+CMD = minikube status:
+
+OUTPUT = 
+
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+
+
+
+
+
+REDO
+
+
+kubectl create -f service-react-sample-lb.yaml
+
+
+sudo kubectl port-forward react-sample2-app 88:80
+
+
+
+
+
+
